@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "BitNet-7B-KDE: A Colab-friendly Knowledge Distillation Engine with Ternary Weights and A8→A4 Activation Flip"
+authors:
+  - family-names: "YourSurname"
+    given-names: "YourName"
+    orcid: "https://orcid.org/0000-0000-0000-0000"
+  - family-names: "Contributors"
+    given-names: "Project"
+version: "0.1.0"
+date-released: "2025-08-28"
+url: "https://github.com/xgrayfoxss21/BitNet-7B-KDE"
+repository-code: "https://github.com/xgrayfoxss21/BitNet-7B-KDE"
+abstract: >
+  BitNet-7B-KDE is a practical pipeline for knowledge distillation to a BitNet-style
+  transformer with ternary weights and an A8→A4 activation flip. It includes a deterministic
+  teacher baseline, KD trace collection (Top-K + Other), a mini training loop, evaluation/QEI,
+  and a 7B forward-pass dry-run—optimized for Google Colab + Drive workflows.
+license: "Apache-2.0"
