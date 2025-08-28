@@ -1,1 +1,21 @@
+# env / secrets
+.env
+.env.local
+*.secret
+
+# python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+
+# notebooks
+.ipynb_checkpoints/
+
+# local artifacts
+reports/
+logs/
+# (Drive paths won’t be inside repo, but keep clean)
 
