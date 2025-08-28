@@ -13,6 +13,7 @@
 SHELL := /usr/bin/env bash
 PY ?= python3
 ENV_FILE ?= .env
+.EXPORT_ALL_VARIABLES:
 
 # Small helper to run a command with .env sourced into the environment.
 define RUN
