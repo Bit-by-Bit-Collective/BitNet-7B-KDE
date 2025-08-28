@@ -1,21 +1,48 @@
-# env / secrets
-.env
-.env.local
-*.secret
-
-# python
+# Python
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
+*.so
+*.dylib
 *.pyd
+.mypy_cache/
+.pytype/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtualenv
 .venv/
 venv/
+env/
 
-# notebooks
+# Jupyter/Colab
 .ipynb_checkpoints/
+*.ipynb.zip
 
-# local artifacts
+# Project caches & artifacts
 reports/
 logs/
-# (Drive paths won’t be inside repo, but keep clean)
+checkpoints/
+data/
+*.parquet
+*.pt
+*.jsonl
 
+# Hugging Face / Torch caches (if not on Drive)
+.hf/
+.hf_cache/
+.torch/
+transformers_cache/
+datasets_cache/
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.local
