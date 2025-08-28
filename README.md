@@ -1,3 +1,5 @@
+# BitNet-7B-KDE (Knowledge Distillation Engine)
+
 # BitNet-7B PoC — KD Distillation (Mini Training + 7B Dry-Run)
 
 > A practical, Colab-friendly pipeline that validates a BitNet-style transformer with **ternary weights**, **A8→A4 activation flip**, and **knowledge distillation (Top-K + Other)** from a locked teacher. Trains a mini model for end-to-end methodology, and performs a **7B forward-pass dry-run** for memory checks.
