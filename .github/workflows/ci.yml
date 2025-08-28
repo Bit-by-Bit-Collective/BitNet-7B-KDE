@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install
+        run: |
+          python -m pip install -U pip
+          python -m pip install -e .[dev]
+          python -m pip install -r requirements.txt || true
+
+      - name: Lint (ruff)
+        run: |
+          python -m ruff check src || true
+
+      - name: Import smoke
+        run: |
+          python - <<'PY'
+          import importlib
+          m = importlib.import_module("bitnet")
+          print("Imported bitnet:", m.__version__)
+          PY
