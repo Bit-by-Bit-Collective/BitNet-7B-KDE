@@ -1,3 +1,40 @@
+# BitNet-7B PoC — KD Distillation (Mini Training + 7B Dry-Run)
+
+> A practical, Colab-friendly pipeline that validates a BitNet-style transformer with **ternary weights**, **A8→A4 activation flip**, and **knowledge distillation (Top-K + Other)** from a locked teacher. Trains a mini model for end-to-end methodology, and performs a **7B forward-pass dry-run** for memory checks.
+
+<p align="center">
+  <a href="https://colab.research.google.com/github/xgrayfoxss21/BitNet-7B-PoC-KD-Distillation-Mini-Training-7B-Dry-Run/blob/main/colab/bitnet_poc_colab.ipynb">
+    <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Run in Colab">
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://github.com/xgrayfoxss21/BitNet-7B-PoC-KD-Distillation-Mini-Training-7B-Dry-Run/actions">
+    <img src="https://img.shields.io/badge/status-experimental-orange" alt="status">
+  </a>
+</p>
+
+---
+
+## TL;DR
+
+- **Teacher baseline (deterministic/greedy)** for a “locked” model (DeepSeek V3.1 used in examples).
+- **KD trace collection**: stores **Top-K tokens + logprobs** and the **“Other” mass** in Parquet.
+- **Projection** to student tokenizer via **first-subtoken rule + log-sum-exp dedup**.
+- **Mini BitNet**: ternary weights (STE), A8 activations with **token-budget flip to A4**.
+- **Losses**: KL (teacher Top-K+Other vs student Top-K+Other) + CE + **format loss** (JSON-ish structure).
+- **Next-token alignment** throughout (no label leakage).
+- **Training stability**: mixed precision (autocast + GradScaler), causal+pad attention masking, safe padding (`P(other)=1` on invalid positions).
+- **7B Dry-Run**: forward pass & memory footprint, plus A8→A4 flip sanity check.
+- **QEI**: crude quality-efficiency indicator vs teacher (for quick iteration).
+
+---
+
+## Repo
+
+```bash
+# Clone
+git clone https://github.com/xgrayfoxss21/BitNet-7B-PoC-KD-Distillation-Mini-Training-7B-Dry-Run.git
+cd BitNet-7B-PoC-KD-Distillation-Mini-Training-7B-Dry-Run
+
 # 🚀 __Quickstart (Colab)__
 
 Open Google Colab.
