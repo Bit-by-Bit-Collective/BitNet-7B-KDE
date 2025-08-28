@@ -1,4 +1,4 @@
-🚀 Quickstart (Colab)
+# 🚀 __Quickstart (Colab)__
 
 Open Google Colab.
 
@@ -22,16 +22,16 @@ Required keys
 DEEPSEEK_API_KEY (prompted at runtime; used for teacher baseline & KD trace collection)
 
 OPENROUTER_API_KEY (optional)
-
-🧰 Requirements
+--------------------------------------------------------------------------------------------
+# 🧰 __Requirements__
 
 GPU strongly recommended (A100/H100 ideal). CPU works for the PoC but will be slow.
 
 Internet access (only for teacher baseline & KD collection).
 
 Google account (to use Drive & Colab).
-
-🗂 Outputs
+--------------------------------------------------------------------------------------------
+# 🗂 __Outputs__
 
 All paths under /content/drive/MyDrive/bitnet_poc/:
 
@@ -45,8 +45,8 @@ checkpoints/mini_bitnet_step_*_health.json — training health+token budget
 mini_evaluation_report.json — eval runs + QEI metrics
 
 pipeline_summary.json — final status & checklist
-
-⚙️ Tunables (inside the script)
+-------------------------------------------------------------------------------------------
+#⚙️ __Tunables (inside the script)__
 
 Mini model config: MINI_CONFIG (layers, dims, heads)
 
@@ -59,73 +59,20 @@ KD: temperature tau=1.3, CE weight, format loss weight
 Flip trigger: token-budget fraction (default 0.9 of BUDGET_TOKENS)
 
 Tokenizer: TinyLlama/TinyLlama-1.1B-Chat-v1.0 (demo)
-
-🧪 Evaluation & QEI
+------------------------------------------------------------------------------------------
+# 🧪 __Evaluation & QEI__
 
 The eval loop runs a few prompts and reports tokens/sec (student).
 
 QEI (efficiency proxy):
 
-QEI
-=
-quality
-student
-/
-quality
-teacher
-memory
-student
-/
-memory
-teacher
-and
-QEI
-speed
-=
-QEI
-×
-TPS
-student
-TPS
-teacher
-QEI=
-memory
-student
-	​
 
-/memory
-teacher
-	​
-
-quality
-student
-	​
-
-/quality
-teacher
-	​
-
-	​
-
-andQEI
-speed
-	​
-
-=QEI×
-TPS
-teacher
-	​
-
-TPS
-student
-	​
-
-	​
+QEI=memorystudent​/memoryteacher​qualitystudent​/qualityteacher​​andQEIspeed​=QEI×TPSteacher​TPSstudent​
 
 
 Quality is a placeholder (0.75 vs 1.0) in the PoC; swap in your benchmark score when ready.
-
-📈 Methodology highlights
+-------------------------------------------------------------------------------------------
+# 📈 __Methodology highlights__
 
 Next-token alignment for KD & CE
 
@@ -138,8 +85,8 @@ Causal + key-padding masks so the model never attends to PAD
 STE everywhere quantized (weights and activations)
 
 A8→A4 flip triggered by actual seen tokens
-
-🧯 Troubleshooting
+------------------------------------------------------------------------------------------
+# 🧯 __Troubleshooting__
 
 401/429 from teacher API: verify DEEPSEEK_API_KEY, reduce request rate, or shorten eval_prompts/train_prompts.
 
@@ -148,8 +95,8 @@ CUDA OOM: reduce batch_size, max_seq_len, or model dims; ensure Colab is on a GP
 NaNs in loss: the script guards invalid KD steps; if they persist, inspect KD parquet for malformed rows.
 
 Slow runs on CPU: expected—switch to GPU runtime.
-
-🧭 Roadmap to production
+-----------------------------------------------------------------------------------------
+# 🧭 __Roadmap to production__
 
 Scale KD data to 30–40M tokens
 
@@ -160,8 +107,8 @@ Full 7B training
 Replace placeholder evals with LiveBench/tool-use/system benchmarks
 
 Gate against the locked teacher baseline
-
-🔒 Notes on usage
+----------------------------------------------------------------------------------------
+# 🔒 __Notes on usage__
 
 This PoC calls a hosted teacher (DeepSeek) to obtain logprobs/Top-K. Ensure you have permission and follow provider ToS.
 
