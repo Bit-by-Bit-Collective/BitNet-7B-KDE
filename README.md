@@ -31,7 +31,7 @@
 
 If this project helps you, consider supporting development.
 
-**BTC Donation**
+**Donations**
 
 <code>qqnmnnu8x7a9gvh3vd5q2f8n2z4gfdz54u4hp7f8nx</code>
 
@@ -39,7 +39,7 @@ If this project helps you, consider supporting development.
 <!-- <a href="bitcoin:bc1_your_address_here?label=BitNet-7B-KDE&message=Support%20the%20project">Send via wallet</a> -->
 
 <sub><em>Heads-up: addresses starting with <code>qq…</code> are typically Bitcoin Cash (BCH) CashAddr.  
-If you meant BTC, replace with a <code>bc1…</code>, <code>1…</code>, or <code>3…</code> address.</em></sub>
+BTC Address.</em></sub>
 
 </div>
 
