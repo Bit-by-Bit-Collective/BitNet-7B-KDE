@@ -4,7 +4,7 @@ import os
 import torch
 
 from scripts.storage import prepare_storage  # your existing file
-from bitnet.llm_clients import get_teacher_client
+from src.bitnet.llm_clients import get_teacher_client
 
 
 def main():
