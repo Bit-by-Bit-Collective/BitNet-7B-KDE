@@ -26,25 +26,6 @@
 
 ---
 
-<div align="center">
-
-## 🙌 Support
-
-If this project helps you, consider supporting development.
-
-**Donations**
-
-<code>qqnmnnu8x7a9gvh3vd5q2f8n2z4gfdz54u4hp7f8nx</code>
-
-<!-- Optional: if this is actually BTC, use a bitcoin: URI -->
-<!-- <a href="bitcoin:bc1_your_address_here?label=BitNet-7B-KDE&message=Support%20the%20project">Send via wallet</a> -->
-
-<sub><em>BTC Address.</em></sub>
-
-</div>
-
----
-
 ## Highlights
 
 - **Pluggable teacher baseline (deterministic/greedy).** DeepSeek in examples; swap any provider that returns logprobs/top-k.
@@ -257,6 +238,7 @@ Gate against teacher success thresholds
 
 See docs/ROADMAP.md
  for v0 → v1 milestones.
+
 ```makefile
 ::contentReference[oaicite:0]{index=0}
 
@@ -324,6 +306,24 @@ See docs/ROADMAP.md
    eval_and_qei.py reads reports + model            train_mini_bitnet.py emits checkpoints
    qei.py computes QEI/QEI_speed                    collect_kd_traces.py emits parquet
    and writes reports/                              run_teacher_baseline.py writes baseline
+```
+
+---
+
+<div align="center">
+
+## 🙌 Support
+If this project helps you, consider supporting development.
+**Donations**
+
+<code>qqnmnnu8x7a9gvh3vd5q2f8n2z4gfdz54u4hp7f8nx</code>
+
+<!-- Optional: if this is actually BTC, use a bitcoin: URI -->
+<!-- <a href="bitcoin:bc1_your_address_here?label=BitNet-7B-KDE&message=Support%20the%20project">Send via wallet</a> -->
+
+<sub><em>BTC Address.</em></sub>
+
+</div>
 
 ```
 
