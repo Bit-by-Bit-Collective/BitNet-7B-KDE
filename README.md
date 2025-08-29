@@ -325,5 +325,4 @@ If this project helps you, consider supporting development.
 
 </div>
 
-```
 
