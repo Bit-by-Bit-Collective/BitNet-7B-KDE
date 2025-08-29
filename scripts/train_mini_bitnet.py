@@ -31,9 +31,9 @@ except Exception:
     except Exception:
         _default_collate = None  # type: ignore
 
-from src.bitnet.models import BitNetLM as MiniBitNet  # Note: also need to fix class name
-from src.bitnet.losses import combined_loss
 from src.bitnet.data import KDTraceDataset
+from src.bitnet.models import BitNetLM as MiniBitNet
+from src.bitnet.losses import combined_loss
 
 
 # ============ helpers ============
