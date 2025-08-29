@@ -24,19 +24,6 @@
   <a href="https://discord.gg/Sefg6cte">💬 Discord</a>
 
 </div>
-┌───────────┐      ┌─────────────┐      ┌───────────────────┐      ┌────────────────┐
-│   USE     │ ───▶ │  CAPTURE    │ ───▶ │ TEACH & TUNE      │ ───▶ │ APPROVE & SHIP │
-│ (Agents)  │      │ (Curate)    │      │ (Weekly updates)  │      │ (Deploy safely)│
-└─────┬─────┘      └──────┬──────┘      └─────────┬─────────┘      └───────┬────────┘
-      │                   │                         │                       │
-      │  outcomes &       │ curated data & evals    │ new agent adapters     │ live models
-      │ feedback          │ per role                │ (specialized skills)   │ (fast & tiny)
-      ▼                   ▼                         ▼                       ▼
-                        ┌────────────────────────────────────────────────────────┐
-                        │     SMARTER CORE SLM + ROLE ADAPTERS (SERVING)        │
-                        └────────────────────────────────────────────────────────┘
-                                      ▲
-                                      └─────────────── back to USE
 
 ## Highlights
 
@@ -49,25 +36,7 @@
 - **Stability baked-in.** Autocast + GradScaler, causal + key-padding masks, safe padding (invalid ⇒ **P(other)=1**).
 - **7B dry-run.** Forward-only memory check and A8→A4 flip validation.
 - **QEI metrics.** Quick **quality-efficiency** proxy vs teacher; replace placeholder with your benchmark later.
-
-[People & Apps]
-      │  tasks & goals
-      ▼
-[Orchestrated Agents]  → plan • retrieve context • call tools • verify
-      │
-      ▼
-[Shared Small Core Model]  → ultra-low latency reasoning/generation
-      │
-      ▼
-[Results]  → content • code • decisions • actions
-      │
-      ├─► (Capture) clean/label/segment by agent/domain
-      │
-      ├─► (Teach & Tune, weekly) teacher-guided fine-tuning per agent
-      │
-      └─► (Approve & Ship) shadow → canary → full rollout
-               ▲
-               └────────── metrics, safety gates, and rollback policy
+<img width="951" height="2216" alt="diagram-export-8-29-2025-12_36_28-AM" src="https://github.com/user-attachments/assets/96f1f702-8e52-43f6-83f2-7b7c272955ef" />
 
 ## Quickstart
 
