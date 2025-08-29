@@ -3,44 +3,60 @@
 
 > A practical, Colab-friendly pipeline that validates a BitNet-style transformer with **ternary weights**, **A8→A4 activation flip**, and **knowledge distillation (Top-K + Other)** from a locked teacher. It trains a compact “mini” model end-to-end and performs a **7B forward-pass dry-run** for memory checks.
 
-<p align="center">
+<div align="center">
+
+  <!-- Row 1: Badges (same height for perfect alignment) -->
   <a href="https://colab.research.google.com/github/xgrayfoxss21/BitNet-7B-KDE/blob/main/notebooks/Colab_Bootstrap.ipynb">
-    <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Run in Colab">
+    <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Run in Colab" height="28">
   </a>
   &nbsp;&nbsp;
   <a href="https://github.com/xgrayfoxss21/BitNet-7B-KDE/actions">
-    <img src="https://img.shields.io/badge/status-experimental-orange" alt="status">
+    <img src="https://img.shields.io/badge/status-experimental-orange" alt="status" height="28">
   </a>
-</p>
 
-<p align="center">
-  <a href="https://bit.foxesden.xyz/">🌐 Project Site</a> ·
+  <br><br>
+
+  <!-- Row 2: Links -->
+  <a href="https://bit.foxesden.xyz/">🌐 Project Site</a>
+  &nbsp;•&nbsp;
   <a href="https://discord.gg/Sefg6cte">💬 Discord</a>
-</p>
+
+</div>
 
 ---
 
+<div align="center">
+
 ## 🙌 Support
 
-If this project helps you, consider supporting development:
+If this project helps you, consider supporting development.
 
-- **Donation token**: `qqnmnnu8x7a9gvh3vd5q2f8n2z4gfdz54u4hp7f8nx`
+**BTC Donation**
 
-> ⚠️ Treat this as a donation string only. **Never** commit real credentials or tokens in your own forks.
+<code>qqnmnnu8x7a9gvh3vd5q2f8n2z4gfdz54u4hp7f8nx</code>
+
+<!-- Optional: if this is actually BTC, use a bitcoin: URI -->
+<!-- <a href="bitcoin:bc1_your_address_here?label=BitNet-7B-KDE&message=Support%20the%20project">Send via wallet</a> -->
+
+<sub><em>Heads-up: addresses starting with <code>qq…</code> are typically Bitcoin Cash (BCH) CashAddr.  
+If you meant BTC, replace with a <code>bc1…</code>, <code>1…</code>, or <code>3…</code> address.</em></sub>
+
+</div>
 
 ---
 
 ## Highlights
 
-- **Teacher baseline (deterministic/greedy)** — locked model baseline (DeepSeek used in examples; provider is pluggable).
-- **KD trace collection** — stores **Top-K tokens + logprobs** and the **“Other” mass** (Parquet).
-- **Projection** — first-subtoken rule + **log-sum-exp dedup** onto student tokenizer.
-- **Mini BitNet** — ternary weights (STE), **A8 activations with token-budget flip to A4**.
-- **Losses** — temperature-matched KL (Top-K+Other) + CE + **format loss** (JSON-ish structure).
-- **Next-token alignment** everywhere (no label leakage).
-- **Training stability** — autocast/GradScaler, causal+pad attention masking, safe padding (`P(other)=1` on invalid steps).
-- **7B Dry-Run** — forward pass, memory footprint, A8→A4 flip sanity check.
-- **QEI** — quick quality-efficiency proxy vs teacher (replace placeholder with your benchmark later).
+- **Pluggable teacher baseline (deterministic/greedy).** DeepSeek in examples; swap any provider that returns logprobs/top-k.
+- **KD traces → Parquet.** Persist **Top-K tokens + logprobs** plus the residual **“Other”** probability mass.
+- **Tokenizer projection with de-dup.** Map teacher candidates via **first-subtoken**; merge collisions via **log-sum-exp**.
+- **Mini BitNet student.** Ternary weights (STE) with **A8 activations** that **flip to A4** by real token budget.
+- **Aligned losses.** Temperature-matched **KL(Top-K+Other)** + **CE** + **format loss** for JSON-like structure.
+- **Strict next-token training.** Predict *t+1* from context ≤ *t* (no label leakage).
+- **Stability baked-in.** Autocast + GradScaler, causal + key-padding masks, safe padding (invalid ⇒ **P(other)=1**).
+- **7B dry-run.** Forward-only memory check and A8→A4 flip validation.
+- **QEI metrics.** Quick **quality-efficiency** proxy vs teacher; replace placeholder with your benchmark later.
+
 
 ---
 
