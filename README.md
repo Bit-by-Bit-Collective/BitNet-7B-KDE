@@ -1,154 +1,313 @@
 # BitNet-7B-KDE (Knowledge Distillation Engine)
+## BitNet-7B PoC — KD Distillation (Mini Training + 7B Dry-Run)
 
-# BitNet-7B PoC — KD Distillation (Mini Training + 7B Dry-Run)
-
-> A practical, Colab-friendly pipeline that validates a BitNet-style transformer with **ternary weights**, **A8→A4 activation flip**, and **knowledge distillation (Top-K + Other)** from a locked teacher. Trains a mini model for end-to-end methodology, and performs a **7B forward-pass dry-run** for memory checks.
+> A practical, Colab-friendly pipeline that validates a BitNet-style transformer with **ternary weights**, **A8→A4 activation flip**, and **knowledge distillation (Top-K + Other)** from a locked teacher. It trains a compact “mini” model end-to-end and performs a **7B forward-pass dry-run** for memory checks.
 
 <p align="center">
-  <a href="https://colab.research.google.com/github/xgrayfoxss21/BitNet-7B-PoC-KD-Distillation-Mini-Training-7B-Dry-Run/blob/main/colab/bitnet_poc_colab.ipynb">
+  <a href="https://colab.research.google.com/github/xgrayfoxss21/BitNet-7B-KDE/blob/main/notebooks/Colab_Bootstrap.ipynb">
     <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Run in Colab">
   </a>
   &nbsp;&nbsp;
-  <a href="https://github.com/xgrayfoxss21/BitNet-7B-PoC-KD-Distillation-Mini-Training-7B-Dry-Run/actions">
+  <a href="https://github.com/xgrayfoxss21/BitNet-7B-KDE/actions">
     <img src="https://img.shields.io/badge/status-experimental-orange" alt="status">
   </a>
 </p>
 
----
-
-## TL;DR
-
-- **Teacher baseline (deterministic/greedy)** for a “locked” model (DeepSeek V3.1 used in examples).
-- **KD trace collection**: stores **Top-K tokens + logprobs** and the **“Other” mass** in Parquet.
-- **Projection** to student tokenizer via **first-subtoken rule + log-sum-exp dedup**.
-- **Mini BitNet**: ternary weights (STE), A8 activations with **token-budget flip to A4**.
-- **Losses**: KL (teacher Top-K+Other vs student Top-K+Other) + CE + **format loss** (JSON-ish structure).
-- **Next-token alignment** throughout (no label leakage).
-- **Training stability**: mixed precision (autocast + GradScaler), causal+pad attention masking, safe padding (`P(other)=1` on invalid positions).
-- **7B Dry-Run**: forward pass & memory footprint, plus A8→A4 flip sanity check.
-- **QEI**: crude quality-efficiency indicator vs teacher (for quick iteration).
+<p align="center">
+  <a href="https://bit.foxesden.xyz/">🌐 Project Site</a> ·
+  <a href="https://discord.gg/Sefg6cte">💬 Discord</a>
+</p>
 
 ---
 
-## Repo
+## 🙌 Support
+
+If this project helps you, consider supporting development:
+
+- **Donation token**: `qqnmnnu8x7a9gvh3vd5q2f8n2z4gfdz54u4hp7f8nx`
+
+> ⚠️ Treat this as a donation string only. **Never** commit real credentials or tokens in your own forks.
+
+---
+
+## Highlights
+
+- **Teacher baseline (deterministic/greedy)** — locked model baseline (DeepSeek used in examples; provider is pluggable).
+- **KD trace collection** — stores **Top-K tokens + logprobs** and the **“Other” mass** (Parquet).
+- **Projection** — first-subtoken rule + **log-sum-exp dedup** onto student tokenizer.
+- **Mini BitNet** — ternary weights (STE), **A8 activations with token-budget flip to A4**.
+- **Losses** — temperature-matched KL (Top-K+Other) + CE + **format loss** (JSON-ish structure).
+- **Next-token alignment** everywhere (no label leakage).
+- **Training stability** — autocast/GradScaler, causal+pad attention masking, safe padding (`P(other)=1` on invalid steps).
+- **7B Dry-Run** — forward pass, memory footprint, A8→A4 flip sanity check.
+- **QEI** — quick quality-efficiency proxy vs teacher (replace placeholder with your benchmark later).
+
+---
+
+## Quickstart
+
+### Option A — Colab (recommended for first run)
+
+1. Open:  
+   **https://colab.research.google.com/github/xgrayfoxss21/BitNet-7B-KDE/blob/main/notebooks/Colab_Bootstrap.ipynb**
+2. Run all cells. The notebook will:
+   - Mount Google Drive (default: `/content/drive`)
+   - Install dependencies
+   - Read your `.env` (or prompt for a teacher API key)
+   - Run **teacher baseline → KD collection → training → eval → 7B dry-run**
+3. Artifacts default to:  
+   `/content/drive/MyDrive/bitnet_poc/`  
+   (Override in `.env` → `DRIVE_ROOT`)
+
+### Option B — Local / Server
 
 ```bash
-# Clone
-git clone https://github.com/xgrayfoxss21/BitNet-7B-PoC-KD-Distillation-Mini-Training-7B-Dry-Run.git
-cd BitNet-7B-PoC-KD-Distillation-Mini-Training-7B-Dry-Run
+git clone https://github.com/xgrayfoxss21/BitNet-7B-KDE.git
+cd BitNet-7B-KDE
+```
 
-# 🚀 __Quickstart (Colab)__
+# 1) Create and edit your env
+```bash
+cp .env.example .env
 
-Open Google Colab.
+# (fill in API keys, PROVIDER, storage backend, DRIVE_ROOT, etc.)
+```
 
-Create a new notebook and paste the contents of colab/bitnet_poc_colab.py into a single cell.
+# 2) Install
+```bash
+python3 -m pip install -U pip
+python3 -m pip install -r requirements.txt
+```
 
-Run all. The script will:
+# 3) Run common tasks
+```bash
+make teacher   # deterministic baseline
+```
+```bash
+make collect   # KD traces → parquet
+```
+```bash
+make train     # mini BitNet training
+```
+```bash
+make eval      # eval + QEI report
+```
+```bash
+make dryrun    # 7B forward-pass memory test
+```
 
-Mount Google Drive at /content/drive
+Multi-Provider API Support
 
-Install dependencies
+Choose a provider in .env:
 
-Prompt for your DeepSeek API key
+```env
+PROVIDER=openai | anthropic | groq | aimlapi | gemini
+```
 
-Run the teacher baseline, KD collection, training, evaluation, and 7B dry-run
+Set the matching *_API_KEY, and optionally *_BASE_URL for OpenAI-compatible endpoints.
 
-Artifacts are saved to:
-/content/drive/MyDrive/bitnet_poc/
+You can separately choose a TEACHER_PROVIDER / TEACHER_MODEL for KD/baseline, so you can chat with one provider but distill from another (that supports logprobs/top-k).
 
-Required keys
+See: docs/EVALUATION.md
+ (teacher baseline details) and docs/ARCHITECTURE.md
 
-DEEPSEEK_API_KEY (prompted at runtime; used for teacher baseline & KD trace collection)
+Storage Backends (Drive / Cloud / DB)
 
-OPENROUTER_API_KEY (optional)
---------------------------------------------------------------------------------------------
-# 🧰 __Requirements__
+Configuration is .env-driven. Out of the box, Google Drive is used in Colab:
 
-GPU strongly recommended (A100/H100 ideal). CPU works for the PoC but will be slow.
+```env
+AUTO_MOUNT_GDRIVE=1
+GDRIVE_MOUNT_POINT=/content/drive
+DRIVE_ROOT=/content/drive/MyDrive/bitnet_poc
+```
 
-Internet access (only for teacher baseline & KD collection).
+You can switch to other targets by filling the relevant section in .env:
 
-Google account (to use Drive & Colab).
---------------------------------------------------------------------------------------------
-# 🗂 __Outputs__
+Google Drive / OneDrive / Dropbox / iCloud / Box / Nextcloud
 
-All paths under /content/drive/MyDrive/bitnet_poc/:
+Amazon S3 (S3_*), Custom WebDAV (WEBDAV_*)
 
-teacher_baseline.json — locked baseline (decode TPS, prompts, usage)
+Firebase / AWS Amplify / Supabase / MongoDB Atlas / Amazon DynamoDB
 
-data/kd_shard_000.parquet — KD traces (Top-K + other)
+The helper scripts/storage.py reads only .env and prepares paths.
 
-checkpoints/mini_bitnet_step_*.pt — model checkpoints
-checkpoints/mini_bitnet_step_*_health.json — training health+token budget
+Full details: docs/STORAGE.md
+ (layout, env variables, examples).
 
-mini_evaluation_report.json — eval runs + QEI metrics
+Outputs
 
-pipeline_summary.json — final status & checklist
--------------------------------------------------------------------------------------------
-#⚙️ __Tunables (inside the script)__
+Defaults (can be changed via .env):
 
-Mini model config: MINI_CONFIG (layers, dims, heads)
+```pgsql
+DRIVE_ROOT/
+  checkpoints/
+    mini_bitnet_step_*.pt
+    mini_bitnet_step_*_health.json
+  data/
+    kd_shard_000.parquet
+  reports/
+    teacher_baseline.json
+    mini_evaluation_report.json
+    pipeline_summary.json
+  logs/
+```
 
-7B config: FULL_7B_CONFIG (forward-only demo)
+Makefile Targets
 
-Training: TOTAL_STEPS, LOG_INTERVAL, CHECKPOINT_INTERVAL, LR schedule, weight decay
+install — install from requirements.txt
 
-KD: temperature tau=1.3, CE weight, format loss weight
+teacher — deterministic teacher baseline (greedy)
 
-Flip trigger: token-budget fraction (default 0.9 of BUDGET_TOKENS)
+collect — KD traces (Top-K + Other) to Parquet
 
-Tokenizer: TinyLlama/TinyLlama-1.1B-Chat-v1.0 (demo)
-------------------------------------------------------------------------------------------
-# 🧪 __Evaluation & QEI__
+train — mini BitNet training (KD + CE + format losses)
 
-The eval loop runs a few prompts and reports tokens/sec (student).
+eval — eval loop + QEI report
 
-QEI (efficiency proxy):
+dryrun — 7B forward-pass memory test
 
+ensure_dirs — storage init from .env
 
-QEI=memorystudent​/memoryteacher​qualitystudent​/qualityteacher​​andQEIspeed​=QEI×TPSteacher​TPSstudent​
+check_env — quick env validation
 
+clean — clean caches
 
-Quality is a placeholder (0.75 vs 1.0) in the PoC; swap in your benchmark score when ready.
--------------------------------------------------------------------------------------------
-# 📈 __Methodology highlights__
+All targets auto-source .env. See Makefile for details.
 
-Next-token alignment for KD & CE
+Evaluation & QEI
 
-Temperature-matched KL (student & teacher at same τ)
+We report tokens/sec and a quick QEI proxy:
 
-Safe padding in KD: when a step is invalid, P(other)=1 to avoid NaNs
+QEI=Ms​/Mt​Qs​/Qt​​QEIspeed​=QEI×TPSt​TPSs​​
 
-Causal + key-padding masks so the model never attends to PAD
+Where Qs/Qt are student/teacher quality scores (placeholder in the PoC).
+Swap in real scores from LiveBench / tool-use / system benchmarks. See docs/EVALUATION.md
 
-STE everywhere quantized (weights and activations)
+Methodology Highlights
 
-A8→A4 flip triggered by actual seen tokens
-------------------------------------------------------------------------------------------
-# 🧯 __Troubleshooting__
+Next-token alignment (KD & CE)
 
-401/429 from teacher API: verify DEEPSEEK_API_KEY, reduce request rate, or shorten eval_prompts/train_prompts.
+Temperature-matched KL (student/teacher at same 𝜏τ)
 
-CUDA OOM: reduce batch_size, max_seq_len, or model dims; ensure Colab is on a GPU runtime.
+Safe KD padding: invalid step ⇒ P(other)=1
 
-NaNs in loss: the script guards invalid KD steps; if they persist, inspect KD parquet for malformed rows.
+Causal + key-padding masks (no attending to PAD)
 
-Slow runs on CPU: expected—switch to GPU runtime.
------------------------------------------------------------------------------------------
-# 🧭 __Roadmap to production__
+STE for ternary weights & fake-quant activations
+
+A8→A4 activation flip triggered by real seen tokens
+
+Hyperparams, flip policy, and stability tips: docs/TRAINING_GUIDE.md
+
+Docs
+
+Architecture: docs/ARCHITECTURE.md
+
+Training Guide: docs/TRAINING_GUIDE.md
+
+Evaluation: docs/EVALUATION.md
+
+Storage Backends: docs/STORAGE.md
+
+Testing Plan: docs/TESTING.md
+
+Benchmarks Plan: docs/BENCHMARKS.md
+
+Release Process: docs/RELEASE_PROCESS.md
+
+Roadmap: docs/ROADMAP.md
+
+Troubleshooting
+
+401/429 — check your API key & quotas; reduce request rate; shrink prompt sets.
+
+CUDA OOM — reduce batch_size, MAX_SEQ_LEN, or model dims; ensure GPU runtime in Colab.
+
+NaNs — guards are in place; if they persist, inspect KD parquet for malformed rows.
+
+Slow CPU runs — expected; use GPU runtime.
+
+Roadmap
 
 Scale KD data to 30–40M tokens
 
-Multi-GPU training (DeepSpeed ZeRO-3 or similar)
+Multi-GPU training (ZeRO-3 or equivalent)
 
 Full 7B training
 
-Replace placeholder evals with LiveBench/tool-use/system benchmarks
+Replace placeholders with LiveBench / tool-use / system benchmarks
 
-Gate against the locked teacher baseline
-----------------------------------------------------------------------------------------
-# 🔒 __Notes on usage__
+Gate against teacher success thresholds
 
-This PoC calls a hosted teacher (DeepSeek) to obtain logprobs/Top-K. Ensure you have permission and follow provider ToS.
+See docs/ROADMAP.md
+ for v0 → v1 milestones.
+```makefile
+::contentReference[oaicite:0]{index=0}
 
-The script saves artifacts to Google Drive by default.
+                                 ┌───────────────────────────┐
+                                 │         .env             │
+                                 │  (keys, storage, model)  │
+                                 └────────────┬──────────────┘
+                                              │
+                                              v
+┌───────────────────────────┐     ┌───────────────────────────┐
+│     User / Colab / CLI    │     │       Makefile targets    │
+│  (Colab nb or terminal)   │───▶ │  teacher | collect | ...  │
+└─────────────┬─────────────┘     └────────────┬──────────────┘
+              │                                  │
+              │                                  │ invokes
+              │                                  v
+              │               ┌───────────────────────────────────────────┐
+              │               │                  scripts/                 │
+              │               │  run_teacher_baseline.py   (teacher)     │
+              │               │  collect_kd_traces.py      (collect)     │
+              │               │  train_mini_bitnet.py      (train)       │
+              │               │  eval_and_qei.py           (eval)        │
+              │               │  dry_run_7b_memory.py      (dryrun)      │
+              │               └───────────────┬──────────────────────────┘
+              │                               │ imports / calls
+              │                               v
+              │               ┌───────────────────────────────────────────┐
+              │               │               src/bitnet/                 │
+              │               │  ├─ apis/provider_client.py  (HTTP AI)    │
+              │               │  ├─ data.py                 (Parquet/DS)  │
+              │               │  ├─ losses.py               (KD/CE/format)│
+              │               │  ├─ models.py               (BitNet mini) │
+              │               │  ├─ qei.py                  (metrics)     │
+              │               │  ├─ storage.py              (paths/cache) │
+              │               │  └─ utils/env.py            (env parsing) │
+              │               └───────────────┬──────────────────────────┘
+              │                               │
+              │                               │ uses
+              │                               v
+              │               ┌───────────────────────────────────────────┐
+              │               │            Provider backends              │
+              │               │  OpenAI | Anthropic | Groq | AIMLAPI |   │
+              │               │  Gemini  (via provider_client.py)        │
+              │               └───────────────────────────────────────────┘
+              │
+              │ writes/reads
+              v
+┌─────────────────────────────────────────────────────────────────────────┐
+│                            Storage backends                             │
+│  (resolved in storage.py via .env)                                      │
+│   • Google Drive (Colab default)  • S3 / WebDAV / OneDrive / Dropbox    │
+│   • iCloud / Box / Nextcloud      • DBs: Supabase / Firebase / DynamoDB │
+│                                                                         │
+│ Folder layout (example):                                                │
+│   DRIVE_ROOT/                                                           │
+│     ├─ checkpoints/   mini_bitnet_step_*.pt, *_health.json              │
+│     ├─ data/          kd_shard_000.parquet                              │
+│     ├─ reports/       teacher_baseline.json, mini_evaluation_report.json│
+│     └─ logs/                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+
+
+                ▲                                                   ▲
+                │                                                   │
+   eval_and_qei.py reads reports + model            train_mini_bitnet.py emits checkpoints
+   qei.py computes QEI/QEI_speed                    collect_kd_traces.py emits parquet
+   and writes reports/                              run_teacher_baseline.py writes baseline
+
+```
+
