@@ -31,8 +31,9 @@ except Exception:
     except Exception:
         _default_collate = None  # type: ignore
 
-from models import MiniBitNet
+from data import KDTraceDataset
 from losses import combined_loss
+from models import MiniBitNet
 
 
 # ============ helpers ============
