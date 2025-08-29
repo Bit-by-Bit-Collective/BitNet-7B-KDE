@@ -24,9 +24,6 @@
   <a href="https://discord.gg/Sefg6cte">💬 Discord</a>
 
 </div>
-<img width="951" height="2216" alt="diagram-export-8-29-2025-12_36_28-AM" src="https://github.com/user-attachments/assets/36bf9a0e-a954-43aa-be08-b0ca1cd56107" />
-
---
 ┌───────────┐      ┌─────────────┐      ┌───────────────────┐      ┌────────────────┐
 │   USE     │ ───▶ │  CAPTURE    │ ───▶ │ TEACH & TUNE      │ ───▶ │ APPROVE & SHIP │
 │ (Agents)  │      │ (Curate)    │      │ (Weekly updates)  │      │ (Deploy safely)│
@@ -41,7 +38,6 @@
                                       ▲
                                       └─────────────── back to USE
 
---
 ## Highlights
 
 - **Pluggable teacher baseline (deterministic/greedy).** DeepSeek in examples; swap any provider that returns logprobs/top-k.
@@ -54,7 +50,6 @@
 - **7B dry-run.** Forward-only memory check and A8→A4 flip validation.
 - **QEI metrics.** Quick **quality-efficiency** proxy vs teacher; replace placeholder with your benchmark later.
 
----
 [People & Apps]
       │  tasks & goals
       ▼
@@ -74,7 +69,6 @@
                ▲
                └────────── metrics, safety gates, and rollback policy
 
----
 ## Quickstart
 
 ### Option A — Colab (recommended for first run)
