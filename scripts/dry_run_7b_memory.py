@@ -16,7 +16,9 @@ from dotenv import load_dotenv
 from transformers import AutoTokenizer
 
 from scripts.storage import prepare_storage
-from models import MiniBitNet
+from src.bitnet.models import BitNetLM as MiniBitNet  # Note: also need to fix class name
+from src.bitnet.losses import combined_loss
+from src.bitnet.data import KDTraceDataset
 
 
 # -----------------------------
