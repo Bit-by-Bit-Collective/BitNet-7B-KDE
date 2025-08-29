@@ -2,8 +2,6 @@
 ## BitNet-7B PoC — KD Distillation (Mini Training + 7B Dry-Run)
 
 > A practical, Colab-friendly pipeline that validates a BitNet-style transformer with **ternary weights**, **A8→A4 activation flip**, and **knowledge distillation (Top-K + Other)** from a locked teacher. It trains a compact “mini” model end-to-end and performs a **7B forward-pass dry-run** for memory checks.
-<img width="951" height="2216" alt="diagram-export-8-29-2025-12_36_28-AM" src="https://github.com/user-attachments/assets/36bf9a0e-a954-43aa-be08-b0ca1cd56107" />
-
 <div align="center">
 
   <!-- Highlighted Goal -->
@@ -19,17 +17,14 @@
   <a href="https://github.com/xgrayfoxss21/BitNet-7B-KDE/actions">
     <img src="https://img.shields.io/badge/status-experimental-orange" alt="status" height="28">
   </a>
-
   <br><br>
-
   <!-- Row 2: Links -->
   <a href="https://bit.foxesden.xyz/">🌐 Project Site</a>
   &nbsp;•&nbsp;
   <a href="https://discord.gg/Sefg6cte">💬 Discord</a>
 
 </div>
-
----
+<img width="951" height="2216" alt="diagram-export-8-29-2025-12_36_28-AM" src="https://github.com/user-attachments/assets/36bf9a0e-a954-43aa-be08-b0ca1cd56107" />
 
 ## Highlights
 
