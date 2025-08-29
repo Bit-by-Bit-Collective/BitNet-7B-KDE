@@ -26,6 +26,22 @@
 </div>
 <img width="951" height="2216" alt="diagram-export-8-29-2025-12_36_28-AM" src="https://github.com/user-attachments/assets/36bf9a0e-a954-43aa-be08-b0ca1cd56107" />
 
+--
+┌───────────┐      ┌─────────────┐      ┌───────────────────┐      ┌────────────────┐
+│   USE     │ ───▶ │  CAPTURE    │ ───▶ │ TEACH & TUNE      │ ───▶ │ APPROVE & SHIP │
+│ (Agents)  │      │ (Curate)    │      │ (Weekly updates)  │      │ (Deploy safely)│
+└─────┬─────┘      └──────┬──────┘      └─────────┬─────────┘      └───────┬────────┘
+      │                   │                         │                       │
+      │  outcomes &       │ curated data & evals    │ new agent adapters     │ live models
+      │ feedback          │ per role                │ (specialized skills)   │ (fast & tiny)
+      ▼                   ▼                         ▼                       ▼
+                        ┌────────────────────────────────────────────────────────┐
+                        │     SMARTER CORE SLM + ROLE ADAPTERS (SERVING)        │
+                        └────────────────────────────────────────────────────────┘
+                                      ▲
+                                      └─────────────── back to USE
+
+--
 ## Highlights
 
 - **Pluggable teacher baseline (deterministic/greedy).** DeepSeek in examples; swap any provider that returns logprobs/top-k.
@@ -38,9 +54,27 @@
 - **7B dry-run.** Forward-only memory check and A8→A4 flip validation.
 - **QEI metrics.** Quick **quality-efficiency** proxy vs teacher; replace placeholder with your benchmark later.
 
+---
+[People & Apps]
+      │  tasks & goals
+      ▼
+[Orchestrated Agents]  → plan • retrieve context • call tools • verify
+      │
+      ▼
+[Shared Small Core Model]  → ultra-low latency reasoning/generation
+      │
+      ▼
+[Results]  → content • code • decisions • actions
+      │
+      ├─► (Capture) clean/label/segment by agent/domain
+      │
+      ├─► (Teach & Tune, weekly) teacher-guided fine-tuning per agent
+      │
+      └─► (Approve & Ship) shadow → canary → full rollout
+               ▲
+               └────────── metrics, safety gates, and rollback policy
 
 ---
-
 ## Quickstart
 
 ### Option A — Colab (recommended for first run)
