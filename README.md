@@ -6,6 +6,11 @@
 
 <div align="center">
 
+  <!-- Highlighted Goal -->
+  <div style="font-size: 22px; font-weight: bold; color: white; background: linear-gradient(90deg, #ff6a00, #ee0979); padding: 10px 20px; border-radius: 12px; display: inline-block; margin-bottom: 20px; box-shadow: 0 0 8px rgba(0,0,0,0.2);">
+    🚀 Goal: Innovation 🚀
+  </div>
+
   <!-- Row 1: Badges (same height for perfect alignment) -->
   <a href="https://colab.research.google.com/github/xgrayfoxss21/BitNet-7B-KDE/blob/main/notebooks/Colab_Bootstrap.ipynb">
     <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Run in Colab" height="28">
