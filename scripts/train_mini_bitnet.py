@@ -19,19 +19,7 @@ from dotenv import load_dotenv
 from transformers import AutoTokenizer
 
 from scripts.storage import prepare_storage
-from data import KDTraceDataset
-# Prefer a collate builder that takes a pad_id; fall back to data.collate_fn if present.
-try:
-    from data import build_collate_fn  # type: ignore
-    HAVE_BUILD_COLLATE = True
-except Exception:
-    HAVE_BUILD_COLLATE = False
-    try:
-        from data import collate_fn as _default_collate  # type: ignore
-    except Exception:
-        _default_collate = None  # type: ignore
-
-from src.bitnet.data import KDTraceDataset
+from src.bitnet.data import KDTraceDataset, build_collate_fn
 from src.bitnet.models import BitNetLM as MiniBitNet
 from src.bitnet.losses import combined_loss
 
@@ -309,35 +297,8 @@ def main() -> int:
     print(f"📦 loading KD traces from: {kd_path}")
     dataset = KDTraceDataset(str(kd_path), max_seq_len=cfg.max_seq_len, max_topk=cfg.max_topk)
 
-    if HAVE_BUILD_COLLATE:
-        collate_fn = build_collate_fn(pad_id=pad_id)
-    elif _default_collate is not None:  # type: ignore
-        collate_fn = _default_collate  # type: ignore
-    else:
-        # Minimal inline fallback collate (uses pad_id)
-        def collate_fn(batch):
-            max_len = max(item["input_ids"].size(0) for item in batch)
-            out = {}
-            keys = ["input_ids", "teacher_sample_id", "topk_ids", "topk_logprobs", "other_logprob", "is_struct_token"]
-            for k in keys:
-                out[k] = []
-
-            attn_masks = []
-            for item in batch:
-                T = item["input_ids"].size(0)
-                pad_T = max_len - T
-                out["input_ids"].append(F.pad(item["input_ids"], (0, pad_T), value=pad_id))
-                out["teacher_sample_id"].append(F.pad(item["teacher_sample_id"], (0, pad_T), value=-100))
-                out["topk_ids"].append(F.pad(item["topk_ids"], (0, 0, 0, pad_T), value=0))
-                out["topk_logprobs"].append(F.pad(item["topk_logprobs"], (0, 0, 0, pad_T), value=-float("inf")))
-                out["other_logprob"].append(F.pad(item["other_logprob"], (0, pad_T), value=-float("inf")))
-                out["is_struct_token"].append(F.pad(item["is_struct_token"], (0, pad_T), value=False))
-                attn = torch.ones(T, dtype=torch.long)
-                attn_masks.append(F.pad(attn, (0, pad_T), value=0))
-            for k in keys:
-                out[k] = torch.stack(out[k], dim=0)
-            out["attention_mask"] = torch.stack(attn_masks, dim=0)
-            return out
+    # Use build_collate_fn from our imports
+    collate_fn = build_collate_fn(pad_id=pad_id)
 
     loader = DataLoader(
         dataset,
