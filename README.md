@@ -38,8 +38,7 @@ If this project helps you, consider supporting development.
 <!-- Optional: if this is actually BTC, use a bitcoin: URI -->
 <!-- <a href="bitcoin:bc1_your_address_here?label=BitNet-7B-KDE&message=Support%20the%20project">Send via wallet</a> -->
 
-<sub><em>Heads-up: addresses starting with <code>qq…</code> are typically Bitcoin Cash (BCH) CashAddr.  
-BTC Address.</em></sub>
+<sub><em>BTC Address.</em></sub>
 
 </div>
 
