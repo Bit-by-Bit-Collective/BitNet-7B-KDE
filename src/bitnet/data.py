@@ -1,5 +1,4 @@
-
-# scripts/data.py
+# src/bitnet/data.py
 from __future__ import annotations
 
 import os
@@ -231,6 +230,11 @@ def make_collate_fn(pad_token_id: int):
         }
 
     return _collate
+
+
+# IMPORTANT: Alias for compatibility with scripts
+build_collate_fn = make_collate_fn
+collate_fn = None  # Will be set by scripts when needed
 
 
 def make_dataloader(
