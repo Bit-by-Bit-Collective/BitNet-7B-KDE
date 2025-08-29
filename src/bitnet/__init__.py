@@ -28,7 +28,7 @@ except PackageNotFoundError:  # pragma: no cover
 
 # --- Re-exports: models ---
 from .models import (  # noqa: F401
-    MiniBitNet,
+    BitNetLM,
     BitNetBlock,
     BitNetAttention,
     BitNetMLP,
@@ -36,6 +36,9 @@ from .models import (  # noqa: F401
     FakeQuantActivation,
     RMSNorm,
 )
+
+# IMPORTANT: Alias for compatibility with scripts
+MiniBitNet = BitNetLM
 
 # --- Re-exports: losses ---
 from .losses import (  # noqa: F401
@@ -46,7 +49,8 @@ from .losses import (  # noqa: F401
 
 # --- Re-exports: data (build_collate_fn may be optional) ---
 try:
-    from .data import KDTraceDataset, build_collate_fn  # type: ignore  # noqa: F401
+    from .data import KDTraceDataset, make_collate_fn  # type: ignore  # noqa: F401
+    build_collate_fn = make_collate_fn  # Alias for compatibility
     _HAS_BUILD_COLLATE = True
 except Exception:  # pragma: no cover
     from .data import KDTraceDataset  # type: ignore  # noqa: F401
@@ -57,6 +61,7 @@ __all__ = [
     "__version__",
     # models
     "MiniBitNet",
+    "BitNetLM",
     "BitNetBlock",
     "BitNetAttention",
     "BitNetMLP",
