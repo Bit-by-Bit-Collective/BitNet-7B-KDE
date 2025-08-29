@@ -1,4 +1,5 @@
 # --- Core training & KD stack ---
+torch>=2.2.0
 transformers>=4.40
 tokenizers>=0.19
 accelerate>=0.29
@@ -8,10 +9,7 @@ tqdm>=4.66
 jsonschema>=4.21
 requests>=2.31
 python-dotenv>=1.0
-
-# PyTorch — install a CUDA-matched build separately on Colab/your machine.
-# If you really want pip to handle it here (CPU only), uncomment:
-# torch>=2.2
+numpy>=1.24
 
 # --- Provider SDKs (teacher / APIs) ---
 openai>=1.30
@@ -35,4 +33,4 @@ google-cloud-storage>=2.17
 # WebDAV/Nextcloud can use 'requests' above; specialized client optional:
 # webdavclient3>=3.14
 
-# (No package required for OneDrive/iCloud in our code path; they’re URI-only here.)
+# (No package required for OneDrive/iCloud in our code path; they're URI-only here.)
