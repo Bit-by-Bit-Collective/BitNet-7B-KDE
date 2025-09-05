@@ -305,21 +305,4 @@ See docs/ROADMAP.md
    and writes reports/                              run_teacher_baseline.py writes baseline
 ```
 
----
-
-<div align="center">
-
-## 🙌 Support
-If this project helps you, consider supporting development.
-**Donations**
-
-<code>qqnmnnu8x7a9gvh3vd5q2f8n2z4gfdz54u4hp7f8nx</code>
-
-<!-- Optional: if this is actually BTC, use a bitcoin: URI -->
-<!-- <a href="bitcoin:bc1_your_address_here?label=BitNet-7B-KDE&message=Support%20the%20project">Send via wallet</a> -->
-
-<sub><em>BTC Address.</em></sub>
-
-</div>
-
 
